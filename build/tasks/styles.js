@@ -105,7 +105,6 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
 
         const timeLabel = `${label || `${filestem}.css`} compiled in`;
         console.time(timeLabel);
-
         try {
             infile  = resolve(infile);
             outfile = resolve(outfile);
