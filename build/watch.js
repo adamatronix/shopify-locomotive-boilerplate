@@ -53,9 +53,7 @@ function configureServer(server, { paths, tasks }) {
     server.watch(
         [
             ...views,
-            join(paths.scripts.dest, '*.js'),
-            join(paths.styles.dest, '*.css'),
-            join(paths.svgs.dest, '*.svg'),
+            join(paths.dest + '/tmp', 'theme.updatetheme'),
         ]
     ).on('change', server.reload);
 
@@ -115,7 +113,17 @@ function createServerOptions({
         open: false,
         notify: false
     };
-
+    
+    config.snippetOption = {
+      rule: {
+        match: /<\/body>/i,
+        fn: (snippet, match) => {
+          return snippet + match;
+        }
+      }
+    }
+    
+    config.reloadDelay = 5000;
     // Resolve the URL for the BrowserSync server
     if (isNonEmptyString(paths.url)) {
         // Use proxy
@@ -130,13 +138,10 @@ function createServerOptions({
     merge(config, resolve(options));
 
     // If HTTPS is enabled, prepend `https://` to proxy URL
-    if (options?.https) {
-        if (isNonEmptyString(config.proxy?.target)) {
-            config.proxy.target = prependSchemeToUrl(config.proxy.target, 'https');
-        } else if (isNonEmptyString(config.proxy)) {
-            config.proxy = prependSchemeToUrl(config.proxy, 'https');
-        }
-    }
+
+    config.proxy = prependSchemeToUrl(config.proxy, 'https');
+
+
 
     return config;
 }
