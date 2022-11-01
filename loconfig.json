@@ -1,6 +1,6 @@
 {
     "paths": {
-        "url": "n9pmbnbmga1en3f1-67103916332.shopifypreview.com",
+        "url": "vu9skxi28bsxp9a0-67103916332.shopifypreview.com",
         "src": "./assets",
         "dest": "./www",
         "images": {
@@ -21,6 +21,9 @@
         "views": {
             "src": "./www/"
         }
+    },
+    "server": {
+      "https": true
     },
     "tasks": {
         "concats": [
