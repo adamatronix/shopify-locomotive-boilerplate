@@ -48,12 +48,11 @@ configureServer(server, loconfig);
  */
 function configureServer(server, { paths, tasks }) {
     const views = createViewsArray(paths.views);
-
     // Reload on any changes to views or processed files
     server.watch(
         [
             ...views,
-            join(paths.dest + '/tmp', 'theme.updatetheme'),
+            join('./', '.theme.update'),
         ]
     ).on('change', server.reload);
 
@@ -123,23 +122,28 @@ function createServerOptions({
       }
     }
     
-    config.reloadDelay = 5000;
-    // Resolve the URL for the BrowserSync server
-    if (isNonEmptyString(paths.url)) {
-        // Use proxy
-        config.proxy = paths.url;
-    } else if (isNonEmptyString(paths.dest)) {
-        // Use base directory
-        config.server = {
-            baseDir: paths.dest
-        };
-    }
+    config.reloadDelay = 1500;
+     // Resolve the URL for the BrowserSync server
+     if (isNonEmptyString(paths.url)) {
+      // Use proxy
+      config.proxy = paths.url;
+  } else if (isNonEmptyString(paths.dest)) {
+      // Use base directory
+      config.server = {
+          baseDir: paths.dest
+      };
+  }
 
-    merge(config, resolve(options));
+  merge(config, resolve(options));
 
-    // If HTTPS is enabled, prepend `https://` to proxy URL
-
-    config.proxy = prependSchemeToUrl(config.proxy, 'https');
+  // If HTTPS is enabled, prepend `https://` to proxy URL
+  if (options?.https) {
+      if (isNonEmptyString(config.proxy?.target)) {
+          config.proxy.target = prependSchemeToUrl(config.proxy.target, 'https');
+      } else if (isNonEmptyString(config.proxy)) {
+          config.proxy = prependSchemeToUrl(config.proxy, 'https');
+      }
+  }
 
 
 

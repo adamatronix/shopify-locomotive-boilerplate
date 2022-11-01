@@ -10,15 +10,20 @@
         "npm": ">=6.0"
     },
     "scripts": {
-        "start": "node --experimental-json-modules --no-warnings build/watch.js",
-        "build": "node --experimental-json-modules --no-warnings build/build.js",
-        "watch": "theme watch --notify=tmp/theme.updatetheme"
+        "start": "run-p theme:watch bs:sync",
+        "bs:sync": "node --experimental-json-modules --no-warnings build/watch.js",
+        "bs:build": "node --experimental-json-modules --no-warnings build/build.js",
+        "theme": "dotenv shopify-themekit -- --config themekit.yml",
+        "theme:watch": "npm run theme watch -- --allow-live --notify=.theme.update"
     },
     "dependencies": {
+        "@shopify/themekit": "^1.1.9",
+        "dotenv-cli": "^6.0.0",
         "locomotive-scroll": "^4.1.4",
         "modujs": "^1.4.2",
         "modularload": "^1.2.6",
         "normalize.css": "^8.0.1",
+        "npm-run-all": "^4.1.5",
         "svg4everybody": "^2.1.9"
     },
     "devDependencies": {
